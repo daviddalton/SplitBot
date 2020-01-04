@@ -24,11 +24,10 @@ bot.on('message', function (user, userID, channelID, message, evt) {
     if (message.substring(0, 1) == '!') {
         var args = message.substring(1).split(' ');
         var cmd = args[0];
-		var username = args[1];
+		var steamID = args[1];
        
         args = args.splice(1);
         switch(cmd) {
-            //Easter Eggs lul
             case 'doc':
                 bot.sendMessage({
                     to: channelID,
@@ -36,23 +35,19 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 });
 				break;
 			case 'lifetime':
-				if (username) {
-					bot.sendMessage({
-					to: channelID,
-					message: 'This will show your lifetime stats ' + userID + '!'
-					});
-				} else {
-					bot.sendMessage({
-					to: channelID,
-					message: 'Add your username to the command so we know who you are.'
-					});
-				}
-			case 'testing':
-				
-				
-				
+				const request = require('request');
+
+				request('REVOKED FOR SECURITY', { json: true }, (err, res, body) => {
+					if (err) { return console.log(err); }
+					console.log(body));
+				});
+				break;
+			case 'timeout':
+				bot.sendMessage({
+				to: channelID,
+				message: 'https://gph.is/297VPgz'
+				})
             break;
-            // Just add any case commands if you want to..
          }
      }
 });
