@@ -39,7 +39,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
 				request('REVOKED FOR SECURITY', { json: true }, (err, res, body) => {
 					if (err) { return console.log(err); }
-					console.log(body));
+					console.log(body);
 				});
 				break;
 			case 'timeout':
