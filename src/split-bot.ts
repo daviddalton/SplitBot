@@ -1,7 +1,8 @@
 import { Client } from 'discord.io';
 import logger from 'winston';
 import config from '../config.json';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+import { SplitGatePlayer } from './models/split-gate-player.model.js';
 
 export class SplitBot {
   private client: Client;
@@ -14,7 +15,7 @@ export class SplitBot {
 
     logger.remove(logger.transports.Console);
     logger.add(new logger.transports.Console());
-    logger.level = 'debug';
+    logger.level = 'info';
   }
 
   public start() {
@@ -40,11 +41,13 @@ export class SplitBot {
             });
             break;
           case 'lifetime':
-            axios.get('/API_URL', {}).then((res) => {
-              logger.log(res.data);
+            const url = `${config.splitGateTrackerBaseUrl}/profile/steam/${steamID}?TRN-Api-Key=${config.trackerNetworkApiKey}`;
+            axios.get(url, {}).then((res: AxiosResponse<{ data: SplitGatePlayer }>) => {
+              const player = res.data.data;
+              logger.info(player);
             })
             .catch((err) => {
-              if (err) { return logger.log(err); }
+              logger.error(err);
             });
             break;
           case 'timeout':

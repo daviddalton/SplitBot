@@ -1,0 +1,45 @@
+import { Stat } from './stat.model';
+
+export interface Stats {
+  points: Stat;
+  kills: Stat;
+  assists: Stat;
+  deaths: Stat;
+  suicides: Stat;
+  teabags: Stat;
+  meleeKills: Stat;
+  portalKills: Stat;
+  killsThruPortal: Stat;
+  damageDealt: Stat;
+  matchesPlayed: Stat;
+  wins: Stat;
+  losses: Stat;
+  wlPercentage: Stat;
+  timePlayed: Stat;
+  headshotsLanded: Stat;
+  collaterals: Stat;
+  headshotKills: Stat;
+  headshotAccuracy: Stat;
+  shotsFired: Stat;
+  shotsLanded: Stat;
+  shotsAccuracy: Stat;
+  kd: Stat;
+  kad: Stat;
+  killsPerMinute: Stat;
+  killsPerMatch: Stat;
+  medalDoubleKills: Stat;
+  medalTripleKills: Stat;
+  medalQuadKills: Stat;
+  medalQuintKills: Stat;
+  medalSexKills: Stat;
+  medalKillstreak1: Stat;
+  medalKillstreak2: Stat;
+  medalKillstreak3: Stat;
+  medalKillstreak4: Stat;
+  medalKillstreak5: Stat;
+  medalKillstreak6: Stat;
+  rankLevel: Stat;
+  rankXp: Stat;
+  progressionLevel: Stat;
+  progressionXp: Stat;
+}
