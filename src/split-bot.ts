@@ -6,6 +6,48 @@ import { SplitGatePlayer } from './models/split-gate-player.model.js';
 
 export class SplitBot {
   private client: Client;
+  private timeoutServerId: string = '';
+  private commands = {
+    'doc': (messageState, args) => {
+      this.client.sendMessage({
+        to: messageState.channelID,
+        message: 'Doc is throwing my game!',
+      });
+    },
+    'lifetime': (messageState, args) => {
+      const steamID = args[0];
+      const url = `${config.splitGateTrackerBaseUrl}/profile/steam/${steamID}?TRN-Api-Key=${config.trackerNetworkApiKey}`;
+      axios.get(url, {}).then((res: AxiosResponse<{ data: SplitGatePlayer }>) => {
+        const player = res.data.data;
+        logger.info(player);
+      })
+      .catch((err) => {
+        logger.error(err);
+      });
+    },
+    'timeout': (messageState, args) => {
+      if (!this.timeoutServerId) {
+        this.client.sendMessage({
+          to: messageState.channelID,
+          message: 'Timeout Server ID is not setup yet. Use command: `setup-timeout <voice-channel-id>`',
+        });
+        return;
+      }
+      const cleanUserId = (args[0] as string).replace(/[^0-9]/g, '');
+      this.client.moveUserTo({
+        userID: cleanUserId,
+        channelID: this.timeoutServerId,
+        serverID: Object.keys(this.client.servers)[0],
+      });
+    },
+    'timeout-setup': (messageState, args) => {
+      this.timeoutServerId = args[0];
+      this.client.sendMessage({
+        to: messageState.channelID,
+        message: `Set Timeout Server ID to ${this.timeoutServerId}`,
+      });
+    },
+  };
 
   constructor() {
     this.client = new Client({
@@ -29,33 +71,21 @@ export class SplitBot {
       // Our bot needs to know if it will execute a command
       // It will listen for messages that will start with `!`
       if (message.substring(0, 1) === '!') {
+        const messageState = {
+          user,
+          userID,
+          channelID,
+          message,
+          evt,
+        };
+
         let args = message.substring(1).split(' ');
         const cmd = args[0];
-        const steamID = args[1];
         args = args.splice(1);
-        switch (cmd) {
-          case 'doc': // TODO: abstract these to dedicated functions to increase readability
-            this.client.sendMessage({
-              to: channelID,
-              message: 'Doc is throwing my game!'
-            });
-            break;
-          case 'lifetime':
-            const url = `${config.splitGateTrackerBaseUrl}/profile/steam/${steamID}?TRN-Api-Key=${config.trackerNetworkApiKey}`;
-            axios.get(url, {}).then((res: AxiosResponse<{ data: SplitGatePlayer }>) => {
-              const player = res.data.data;
-              logger.info(player);
-            })
-            .catch((err) => {
-              logger.error(err);
-            });
-            break;
-          case 'timeout':
-            this.client.sendMessage({
-              to: channelID,
-              message: 'https://gph.is/297VPgz'
-            });
-            break;
+        if (this.commands[cmd]) {
+          this.commands[cmd](messageState, args);
+        } else {
+          logger.error(`Command not found: ${cmd}`);
         }
       }
     });
