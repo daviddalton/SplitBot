@@ -1,0 +1,24 @@
+{
+    "defaultSeverity": "error",
+    "extends": [
+        "tslint:recommended"
+    ],
+    "jsRules": {},
+    "rules": {
+        "eofline": true,
+        "quotemark": [
+            true,
+            "single"
+        ],
+        "trailing-comma": true,
+        "no-trailing-whitespace": true,
+        "object-literal-sort-keys": false,
+        "only-arrow-functions": false,
+        "ordered-imports": false,
+        "indent": [true, "spaces", 2],
+        "exclude": [
+            "node_modules"
+        ]
+    },
+    "rulesDirectory": []
+}

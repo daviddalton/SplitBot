@@ -9,3 +9,9 @@ Commands:
 !doc
 
 !timeout
+
+Startup:
+```
+npm i
+npm run start
+```
